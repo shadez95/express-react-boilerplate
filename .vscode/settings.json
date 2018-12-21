@@ -1,0 +1,9 @@
+{
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.formatOnType": true,
+  "javascript.format.enable": false,
+  "prettier.eslintIntegration": true,
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true
+}

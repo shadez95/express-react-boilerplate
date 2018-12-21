@@ -23,11 +23,11 @@ const router = express.Router();
  *         type: integer
  *         description: Unique identifier representing a specific user
  *         example: 2
- *       first_name:
+ *       firstName:
  *         type: string
  *         description: first name of the user
  *         example: Krishna
- *       last_name:
+ *       lastName:
  *         type: string
  *         description: last name of the user
  *         example: Timilsina
@@ -85,171 +85,171 @@ const router = express.Router();
  *
  */
 
-router.route('/')
+router
+  .route('/')
 
 /**
- * @swagger
- * /users:
- *   post:
- *     tags:
- *       - user
- *     summary: "Create a new user"
- *     security:
- *        - Bearer: []
- *     operationId: storeUser
- *     consumes:
- *       - application/json
- *     produces:
- *       - application/json
- *     parameters:
- *       - name: body
- *         in: body
- *         description: Created user object
- *         required: true
- *         schema:
- *           $ref: "#/definitions/User"
- *     responses:
- *       200:
- *         description: OK
- *         schema:
- *           $ref: "#/definitions/User"
- *       403:
- *          description: User not found
- *          schema:
- *             $ref: '#/definitions/Error'
- */
+   * @swagger
+   * /users:
+   *   post:
+   *     tags:
+   *       - user
+   *     summary: "Create a new user"
+   *     security:
+   *        - Bearer: []
+   *     operationId: storeUser
+   *     consumes:
+   *       - application/json
+   *     produces:
+   *       - application/json
+   *     parameters:
+   *       - name: body
+   *         in: body
+   *         description: Created user object
+   *         required: true
+   *         schema:
+   *           $ref: "#/definitions/User"
+   *     responses:
+   *       200:
+   *         description: OK
+   *         schema:
+   *           $ref: "#/definitions/User"
+   *       403:
+   *          description: User not found
+   *          schema:
+   *             $ref: '#/definitions/Error'
+   */
 
-    .post(validate(schema.storeUser), (req, res) => {
-        userCtrl.store(req, res);
-    })
-
-    /**
-     * @swagger
-     * /users:
-     *   get:
-     *     tags:
-     *       - user
-     *     summary: "List all users"
-     *     operationId: findAll
-     *     consumes:
-     *       - application/json
-     *     produces:
-     *       - application/json
-     *     parameters: []
-     *     responses:
-     *       200:
-     *         description: OK
-     *         schema:
-     *            type: object
-     */
-
-    .get( (req, res) => {
-        userCtrl.findAll(req, res);
-    });
-
-
-router.route('/:id')
+  .post(validate(schema.createUser), (req, res) => {
+    userCtrl.create(req, res);
+  })
 
 /**
- * @swagger
- * /users/{id}:
- *   get:
- *     tags:
- *       - user
- *     summary: Find the user by ID
- *     operationId: findById
- *     consumes:
- *       - application/json
- *     produces:
- *       - application/json
- *     parameters:
- *       - name: id
- *         in: path
- *         description: id of user that needs to be fetched
- *         required: true
- *         type: integer
- *     responses:
- *       200:
- *         description: OK
- *         schema:
- *           $ref: "#/definitions/User"
- *       404:
- *          description: User not found
- *          schema:
- *             $ref: '#/definitions/Error'
- */
+   * @swagger
+   * /users:
+   *   get:
+   *     tags:
+   *       - user
+   *     summary: "List all users"
+   *     operationId: findAll
+   *     consumes:
+   *       - application/json
+   *     produces:
+   *       - application/json
+   *     parameters: []
+   *     responses:
+   *       200:
+   *         description: OK
+   *         schema:
+   *            type: object
+   */
 
-    .get( (req, res) => {
-        userCtrl.findById(req, res);
-    })
+  .get((req, res) => {
+    userCtrl.findAll(req, res);
+  });
 
-    /**
-     * @swagger
-     * /users/{id}:
-     *   put:
-     *     tags:
-     *       - user
-     *     summary: "Update an existing user by ID"
-     *     security:
-     *       - Bearer: []
-     *     operationId: update
-     *     consumes:
-     *       - application/json
-     *     produces:
-     *       - application/json
-     *     parameters:
-     *       - name: id
-     *         in: path
-     *         description: id that need to be updated
-     *         required: true
-     *         type: integer
-     *       - name: body
-     *         in: body
-     *         description: Updated user object
-     *         required: true
-     *         schema:
-     *           $ref: "#/definitions/User"
-     *     responses:
-     *       200:
-     *         description: OK
-     *         schema:
-     *           $ref: "#/definitions/User"
-     *       400:
-     *         description: Invalid user
-     */
+router
+  .route('/:id')
 
-    .put(isAuthenticated, (req, res) => {
-        userCtrl.update(req, res);
-    })
+/**
+   * @swagger
+   * /users/{id}:
+   *   get:
+   *     tags:
+   *       - user
+   *     summary: Find the user by ID
+   *     operationId: findById
+   *     consumes:
+   *       - application/json
+   *     produces:
+   *       - application/json
+   *     parameters:
+   *       - name: id
+   *         in: path
+   *         description: id of user that needs to be fetched
+   *         required: true
+   *         type: integer
+   *     responses:
+   *       200:
+   *         description: OK
+   *         schema:
+   *           $ref: "#/definitions/User"
+   *       404:
+   *          description: User not found
+   *          schema:
+   *             $ref: '#/definitions/Error'
+   */
 
-    /**
-     * @swagger
-     * /users/{id}:
-     *   delete:
-     *     tags:
-     *       - user
-     *     summary: Delete the user by ID
-     *     security:
-     *       - Bearer: []
-     *     operationId: destroy
-     *     produces:
-     *       - application/json
-     *     parameters:
-     *       - name: id
-     *         in: path
-     *         description: id of user that needs to be deleted
-     *         required: true
-     *         type: integer
-     *     responses:
-     *       200:
-     *         description: OK
-     *       400:
-     *          description: "Invalid ID"
-     */
+  .get((req, res) => {
+    userCtrl.findById(req, res);
+  })
 
-    .delete(isAuthenticated, (req, res) => {
-        userCtrl.destroy(req, res);
-    });
+/**
+   * @swagger
+   * /users/{id}:
+   *   put:
+   *     tags:
+   *       - user
+   *     summary: "Update an existing user by ID"
+   *     security:
+   *       - Bearer: []
+   *     operationId: update
+   *     consumes:
+   *       - application/json
+   *     produces:
+   *       - application/json
+   *     parameters:
+   *       - name: id
+   *         in: path
+   *         description: id that need to be updated
+   *         required: true
+   *         type: integer
+   *       - name: body
+   *         in: body
+   *         description: Updated user object
+   *         required: true
+   *         schema:
+   *           $ref: "#/definitions/User"
+   *     responses:
+   *       200:
+   *         description: OK
+   *         schema:
+   *           $ref: "#/definitions/User"
+   *       400:
+   *         description: Invalid user
+   */
 
+  .put(isAuthenticated, (req, res) => {
+    userCtrl.update(req, res);
+  })
+
+/**
+   * @swagger
+   * /users/{id}:
+   *   delete:
+   *     tags:
+   *       - user
+   *     summary: Delete the user by ID
+   *     security:
+   *       - Bearer: []
+   *     operationId: destroy
+   *     produces:
+   *       - application/json
+   *     parameters:
+   *       - name: id
+   *         in: path
+   *         description: id of user that needs to be deleted
+   *         required: true
+   *         type: integer
+   *     responses:
+   *       200:
+   *         description: OK
+   *       400:
+   *          description: "Invalid ID"
+   */
+
+  .delete(isAuthenticated, (req, res) => {
+    userCtrl.destroy(req, res);
+  });
 
 export default router;

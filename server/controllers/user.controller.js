@@ -10,17 +10,18 @@ import User from '../models/user.model';
  * @returns {*}
  */
 export function findAll(req, res) {
-    User.forge()
-        .fetchAll()
-        .then(user => res.json({
-                error: false,
-                data: user.toJSON()
-            })
-        )
-        .catch(err => res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-                error: err
-            })
-        );
+  new User()
+    .fetchAll()
+    .then(user => res.json({
+      error: null,
+      message: 'Success',
+      data: user.toJSON(),
+    }))
+    .catch(err => res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+      error: err,
+      message: 'Failed to find all users.',
+      data: {},
+    }));
 }
 
 /**
@@ -31,25 +32,28 @@ export function findAll(req, res) {
  * @returns {*}
  */
 export function findById(req, res) {
-    User.forge({id: req.params.id})
-        .fetch()
-        .then(user => {
-            if (!user) {
-                res.status(HttpStatus.NOT_FOUND).json({
-                    error: true, data: {}
-                });
-            }
-            else {
-                res.json({
-                    error: false,
-                    data: user.toJSON()
-                });
-            }
-        })
-        .catch(err => res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-                error: err
-            })
-        );
+  new User({ id: req.params.id })
+    .fetch()
+    .then((user) => {
+      if (!user) {
+        res.status(HttpStatus.NOT_FOUND).json({
+          error: null,
+          message: 'User does not exist.',
+          data: {},
+        });
+      } else {
+        res.json({
+          error: null,
+          message: 'Success',
+          data: user.toJSON(),
+        });
+      }
+    })
+    .catch(err => res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+      error: err,
+      data: {},
+      message: 'Failed to find user by ID.',
+    }));
 }
 
 /**
@@ -59,22 +63,27 @@ export function findById(req, res) {
  * @param {object} res
  * @returns {*}
  */
-export function store(req, res) {
-    const {first_name, last_name, email} = req.body;
-    const password = bcrypt.hashSync(req.body.password, 10);
+export function create(req, res) {
+  const { firstName, lastName, email } = req.body;
+  const password = bcrypt.hashSync(req.body.password, 10);
 
-    User.forge({
-        first_name, last_name, email, password
-    }, {hasTimestamps: true}).save()
-        .then(user => res.json({
-                success: true,
-                data: user.toJSON()
-            })
-        )
-        .catch(err => res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-                error: err
-            })
-        );
+  new User({
+    firstName,
+    lastName,
+    email,
+    password,
+  })
+    .save()
+    .then(user => res.json({
+      error: null,
+      data: user.toJSON(),
+      message: 'Success',
+    }))
+    .catch(err => res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+      error: err,
+      data: {},
+      message: 'Failed to create user.',
+    }));
 }
 
 /**
@@ -85,28 +94,29 @@ export function store(req, res) {
  * @returns {*}
  */
 export function update(req, res) {
-    User.forge({id: req.params.id})
-        .fetch({require: true})
-        .then(user => user.save({
-                first_name: req.body.first_name || user.get('first_name'),
-                last_name: req.body.last_name || user.get('last_name'),
-                email: req.body.email || user.get('email')
-            })
-                .then(() => res.json({
-                        error: false,
-                        data: user.toJSON()
-                    })
-                )
-                .catch(err => res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-                        error: true,
-                        data: {message: err.message}
-                    })
-                )
-        )
-        .catch(err => res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-                error: err
-            })
-        );
+  new User({ id: req.params.id })
+    .fetch({ require: true })
+    .then(user => user
+      .save({
+        firstName: req.body.firstName || user.get('firstName'),
+        lastName: req.body.lastName || user.get('lastName'),
+        email: req.body.email || user.get('email'),
+      })
+      .then(() => res.json({
+        error: null,
+        data: user.toJSON(),
+        message: 'Success',
+      }))
+      .catch(err => res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        error: err,
+        message: 'Failed to save update.',
+        data: {},
+      })))
+    .catch(err => res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+      error: err,
+      message: 'Failed to find and update user.',
+      data: {},
+    }));
 }
 
 /**
@@ -117,22 +127,23 @@ export function update(req, res) {
  * @returns {*}
  */
 export function destroy(req, res) {
-    User.forge({id: req.params.id})
-        .fetch({require: true})
-        .then(user => user.destroy()
-            .then(() => res.json({
-                    error: false,
-                    data: {message: 'User deleted successfully.'}
-                })
-            )
-            .catch(err => res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-                    error: true,
-                    data: {message: err.message}
-                })
-            )
-        )
-        .catch(err => res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-                error: err
-            })
-        );
+  new User({ id: req.params.id })
+    .fetch({ require: true })
+    .then(user => user
+      .destroy()
+      .then(() => res.json({
+        error: null,
+        message: 'User deleted successfully.',
+        data: {},
+      }))
+      .catch(err => res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        error: err,
+        message: 'Failed to delete user.',
+        data: {},
+      })))
+    .catch(err => res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+      error: err,
+      message: 'Failed to find and delete user.',
+      data: {},
+    }));
 }

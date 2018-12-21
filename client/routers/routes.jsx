@@ -1,8 +1,8 @@
 import React from 'react';
 
 // Import routing components
-import {Route, Switch} from 'react-router-dom';
-import {ConnectedRouter} from 'react-router-redux';
+import { Route, Switch } from 'react-router-dom';
+import { ConnectedRouter } from 'connected-react-router';
 import history from '../utils/history';
 
 // Import custom components
@@ -14,20 +14,20 @@ import Dashboard from '../containers/dashboard/DashboardContainer';
 import AuthenticatedRoute from './AuthenticatedRoute';
 
 const Router = () => (
-    <ConnectedRouter history={history}>
+  <ConnectedRouter history={history}>
+    <Switch>
+      <Route exact path="/" component={LoginForm} />
+      <Route path="/signup" component={SignUpForm} />
+
+      <MainLayout>
         <Switch>
-            <Route exact path="/" component={LoginForm}/>
-            <Route path="/signup" component={SignUpForm}/>
-
-            <MainLayout>
-                <Switch>
-                    <AuthenticatedRoute path="/dashboard" component={Dashboard}/>
-                </Switch>
-            </MainLayout>
-
-            <Route component={NotFound}/>
+          <AuthenticatedRoute path="/dashboard" component={Dashboard} />
         </Switch>
-    </ConnectedRouter>
+      </MainLayout>
+
+      <Route component={NotFound} />
+    </Switch>
+  </ConnectedRouter>
 );
 
 export default Router;

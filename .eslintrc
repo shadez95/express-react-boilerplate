@@ -4,11 +4,9 @@
     "node": true,
     "jasmine": true
   },
-  "extends": [
-    "eslint:recommended",
-    "plugin:react/recommended"
-  ],
+  "extends": ["airbnb"],
   "parser": "babel-eslint",
+  "plugins": ["react", "jsx-a11y", "import"],
   "rules": {
     "semi": 2,
     "curly": 2,
@@ -17,9 +15,8 @@
     "space-infix-ops": 2,
     "newline-before-return": 2,
     "linebreak-style": [2, "unix"],
-    "camelcase": [2, {"properties": "never"}],
-    "quotes": [2, "single", {"allowTemplateLiterals": true}],
+    "quotes": [2, "single", { "allowTemplateLiterals": true }],
     "react/jsx-uses-react": "error",
-    "react/jsx-uses-vars": "error",
+    "react/jsx-uses-vars": "error"
   }
 }
